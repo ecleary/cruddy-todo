@@ -8,9 +8,10 @@ var items = {};
 // Public API - Fix these CRUD functions ///////////////////////////////////////
 
 exports.create = (text, callback) => {
+  // console.log(`CHECKING VARIABLE fs.readdirSync(exports.dataDir): ${Array.isArray((fs.readdirSync(exports.dataDir)))}`);
   counter.getNextUniqueId((err, id) => {
     if (err) {
-      throw ('error getting id');
+      callback(err);
     } else {
       fs.writeFile(path.join(exports.dataDir, `${id}.txt`), text, (err) => {
         if (err) {
@@ -25,10 +26,37 @@ exports.create = (text, callback) => {
 
 
 exports.readAll = (callback) => {
-  var data = _.map(items, (text, id) => {
-    return { id, text };
+  //retrieve contents of data
+  //map filename to text and id
+  //get array with readdir
+  //iterate through array creating new objects with key value pair of filename for each file
+  fs.readdir(exports.dataDir, (err, files) => {
+    if (err) {
+      callback(err);
+    } else {
+      if (files.length === 0) {
+        callback(null, []);
+      } else {
+      /*
+      // Iterate over files using _.map and assign result to filesArray
+      // Set variable to substring of just id number of each item
+      // Create object literal named currentFile with id substring as value of id and text properties
+      // Return currentFile
+      // Call callback and pass in null and filesArray
+      */
+        let filesArray = _.map(files, (file) => {
+          let fileNumber = file.substring(0, 5);
+          let currentFile = { id: fileNumber, text: fileNumber};
+          return currentFile;
+        });
+        callback(null, filesArray);
+      }
+    }
   });
-  callback(null, data);
+  // var data = _.map(items, (text, id) => {
+  //   return { id, text };
+  // });
+  // callback(null, data);
 };
 
 exports.readOne = (id, callback) => {
