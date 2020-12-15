@@ -54,7 +54,6 @@ exports.getNextUniqueId = (callback) => {
   });
 };
 
-// console.log(`Result of calling getNextUniqueId: ${exports.getNextUniqueId()}`);
 
 // exports.getNextUniqueId = () => {
 //   counter = counter + 1;

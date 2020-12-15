@@ -9,14 +9,21 @@ var items = {};
 
 exports.create = (text, callback) => {
   // var id = counter.getNextUniqueId();
-  var id;
+  // var id;
   counter.getNextUniqueId((err, idString) => {
-    id = idString;
+    console.log(`CHECKING VARIABLE path: ${path.join(exports.dataDir, `${idString}.txt`)}`);
+    if (err) {
+      throw ('error getting id');
+    } else {
+      fs.writeFile(path.join(exports.dataDir, `${idString}.txt`), text, callback(null/*, { idString, text }*/));
+    }
+    // id = idString;
   });
-  items[id] = text;
-  console.log(items);
-  callback(null, { id, text });
+  // items[id] = text;
+  // callback(null, { id, text });
 };
+
+//fs.writeFile(`${idString}.txt` , text, callback(null))
 
 exports.readAll = (callback) => {
   var data = _.map(items, (text, id) => {
