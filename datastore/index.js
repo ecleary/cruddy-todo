@@ -24,24 +24,26 @@ exports.create = (text, callback) => {
 };
 
 
-exports.readAll = (callback) => {
+exports.readAll = (callback) => new Promise((resolve, reject) => {
   fs.readdir(exports.dataDir, (err, files) => {
     if (err) {
-      callback(err);
+      reject(err);
     } else {
       if (files.length === 0) {
-        callback(null, []);
+        resolve([]);
       } else {
         let filesArray = _.map(files, (file) => {
           let fileNumber = file.substring(0, 5);
           let currentFile = { id: fileNumber, text: fileNumber};
           return currentFile;
         });
-        callback(null, filesArray);
+        resolve(filesArray);
       }
     }
   });
-};
+});
+
+
 
 exports.readOne = (id, callback) => {
   /*
